@@ -47,7 +47,7 @@ test('Should render the header', async () => {
   render(<App />)
   const banner = screen.getByRole('banner')
   const headerImg = screen.getByAltText(/alchemy/i)
-  const profileName = await screen.findByText(user.name)
+  const profileName = await screen.findAllByText(user.name)
 
   expect(banner).toHaveStyle({
     background: 'var(--grey)',
@@ -69,6 +69,20 @@ test('Should render the header with Sasuke 🌬️🔥', async () => {
   }
 
   // 🚨 Use the server to change the response for this test
+  server.use(
+    rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
+      const select = req.url.searchParams.get('select')
+      if (select === '*') {
+        return res(ctx.json([sasuke]))
+      }
+      return res(
+        ctx.status(500),
+        ctx.json({
+          error: 'no user found',
+        })
+      )
+    })
+  )
 
   render(<App />)
 
