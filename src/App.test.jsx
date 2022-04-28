@@ -74,7 +74,7 @@ test('Should render the header with Sasuke 🌬️🔥', async () => {
       const select = req.url.searchParams.get('select')
       if (select === '*') {
         return res(ctx.json([sasuke])) 
-        // takes in an array
+        // server returns in an array
       }
       return res(
         ctx.status(500),
